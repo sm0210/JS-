@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<title>分页效果</title>
+		<meta charset="utf-8"/>
+		<!--
+			author: SM
+			email: sm0210@qq.com
+			desc: 分页效果
+		-->
+	</head>
+	<style type="text/css">
+		body {
+			padding: 10px;
+		}
+		a, font, button, input {
+			border: 1px solid #ccc;
+			min-width: 30px;
+			height: 30px;
+			display: inline-block;
+			text-align: center;
+			line-height: 30px;
+			text-decoration:none;
+			color: #007DE3;
+			padding: 2px;
+		}
+		font {
+			color: #000;
+		}
+		button{
+			width: 36px;
+			height: 36px;
+		}
+	</style>
+<body>
+		
+		<script>
+			//获取url参数
+			getParameterByName= function (name) {
+				name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+				var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+					results = regex.exec(location.search);
+				return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+			//跳转页
+			goPage = function(){
+				//
+				var pageEl = document.getElementById('gopageInput');
+				window.location.href='?page=' + pageEl.value;
+			}
+			
+			//分页
+			var html = '';
+			var currentPage = Number(getParameterByName('page') || 1);
+			var totalCount = 569;//总记录数
+			var pageSize = 10; //一页10条
+			var pageCount = Math.ceil(totalCount / pageSize); //总共多少页
+			
+			//分页是否超过总记录数
+			if(currentPage > pageCount) {
+				currentPage = pageCount;
+			}
+			//分页是否少于1
+			if(currentPage < 1) {
+				currentPage = 1;
+			}
+			//开始分页数
+			var startPage = currentPage - 5;
+			//结束分页数
+			var endPage = currentPage + 4;
+			
+			//如果大于总页数
+			if(endPage > pageCount) {
+				endPage = pageCount;
+			}
+			//如果分页小于5页
+			if(currentPage <= 5){
+				endPage = pageCount > 10 ? 10 : pageCount;
+			}
+			//如果最后几页不够10的，开始分页补齐
+			if(endPage == pageCount){
+				//
+				var diff = 4 - (pageCount - currentPage);
+				startPage = startPage - diff;
+			}
+			//
+			if(startPage < 1) startPage = 1;
+			
+			
+			//显示信息
+			html+= '<span style="padding-right: 100px;">显示：'+((currentPage - 1) * pageSize + 1)+' - '+(Math.min(currentPage * pageSize, totalCount))+'条,共'+totalCount+'条/'+pageCount+'页</span>';
+
+			//是否显示上一页 和 第一页
+			if(currentPage > 1) {
+				//第一页
+				html+= '<a title="第一页" href="?page=1"> << </a> &nbsp;';
+				//上一页
+				html+= '<a title="上一页" href="?page='+(currentPage - 1)+'"> < </a> &nbsp;';
+			}else{
+				//不可以点击
+				//第一页
+				html+= '<font title="已是第一页" > << </font> &nbsp;';
+				//上一页
+				html+= '<font title="已是第一页" > < </font> &nbsp;';
+			}
+			
+			//
+			for(var i = startPage; i <= endPage;i++){
+				if(i == currentPage){
+					html+= '<font>'+i+ '</font> &nbsp;';
+				}else{
+					html+= '<a  href="?page='+i+'">'+i+'</a> &nbsp;';
+				}
+				
+			}
+			
+			//是否显示下一页和最后一页
+			if(currentPage < pageCount){
+				//下一页
+				html+= '<a  title="下一页" href="?page='+(currentPage + 1)+'"> > </a> &nbsp;';
+				
+				//最后一页
+				html+= '<a  title="最后一页" href="?page='+(pageCount)+'"> >> </a> &nbsp;';
+			}else{
+				//不可以点击
+				//下一页
+				html+= '<font  title="已是最后一页"> > </font> &nbsp;';
+				
+				//最后一页
+				html+= '<font  title="已是最后一页" > >> </font> &nbsp;';
+			}
+			
+			//跳转
+			html+='转到 <input id="gopageInput" type="text" style="width:50px;height: 36px;" value="'+(Math.min(currentPage + 1, pageCount))+'"/> 页 <button onclick="goPage();">确定</button>';
+			
+			//
+			document.write(html);
+		</script>
+		
+	</body>
+</html>
