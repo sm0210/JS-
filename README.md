@@ -3,6 +3,6 @@
 
 # 效果
 
-![avatar](http://baidu.com/pic/doge.png)
 
-![paging][https://github.com/sm0210/JS-Paging/blob/master/paging.png]
+
+![image][https://github.com/sm0210/JS-Paging/blob/master/paging.png]
